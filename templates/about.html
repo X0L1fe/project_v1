@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{%block title %}𝒫𝒽𝑜𝓉𝑜𝒫𝒶𝒾𝓃𝓉𝑒𝓇 | О нас{% endblock %}
+
+{% block links %}
+<script src="{{ url_for('static', filename='js/background.js')}}" type="text/javascript" defer></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+{% endblock %}
+
+{% block body %}
+<!--стр о нас-->
+<div class="background" id="background"></div>
+<div class="page" id="about">
+    <div class="content">
+        <p class="Text">PhotoPainter - это мощный и универсальный инструмент, разработанный для творческой
+            обработки
+            и создания фотографий
+            с использованием передовых технологий. Он обладает обширным и разнообразным функционалом,
+            предоставляющим пользователям широкий
+            спектр возможностей в области редактирования, ретуширования, цветокоррекции, композиции и
+            создания
+            искусственных эффектов на изображениях.</p>
+    </div>
+</div>
+{% endblock %}

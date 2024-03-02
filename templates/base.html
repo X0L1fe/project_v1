@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {%block links%}
+    {%endblock%}
+    <link rel="icon" href="{{ url_for('static', filename='img/camera_v1-RPBGY.png')}}"><!--иконка страницы-->
+    <title>{% block title %}{% endblock %}</title>
+</head>
+
+<body>
+    {% block body %}
+    {% endblock %}
+</body>
+
+</html>

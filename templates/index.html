@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{%block title %}𝒫𝒽𝑜𝓉𝑜𝒫𝒶𝒾𝓃𝓉𝑒𝓇{% endblock %}
+
+{% block links %}
+<script src="{{ url_for('static', filename='js/background.js')}}" type="text/javascript" defer></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css')}}">
+{% endblock %}
+
+{% block body %}
+<div class="background" id="background"></div>
+<nav class="TopMenu"><!--гл меню-->
+        <a class="MainLogo" href="/"><img src="{{ url_for('static', filename='img/camera_v1-RPBGY.png')}}"
+                        width="100"></a> <!-- логотип с ссылко на ГМ(главное меню)-->
+        <ul class="navbar">
+                <li class="LeftItem"><a href="/about">О нас</a></li>
+                <li class="LeftItem"><a href="/premier">Портфолио</a></li>
+                <li class="LeftItem"><a href="/contakts">Контакты</a></li>
+
+                <li class="RightItem"><a href="/registering">Регистрация</a></li>
+                <li class="RightItem"><a href="/logining">Войти</a></li>
+
+                <li class="TopItem"><a href="/logining">Начать работу</a></li>
+
+                <li class="TopItem"><a href="/workplace">Рисунок</a></li>
+        </ul>
+</nav>
+<!---->
+{% endblock %}

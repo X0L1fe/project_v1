@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{%block title %}𝒫𝒽𝑜𝓉𝑜𝒫𝒶𝒾𝓃𝓉𝑒𝓇{% endblock %}
+
+{% block links %}
+<script src="{{ url_for('static', filename='js/background.js')}}" type="text/javascript" defer></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+{% endblock %}
+
+{% block body %}
+<!--контакты-->
+<div class="background" id="background"></div>
+<div class="page" id="contakts">
+    <ul class="navbarContakts">
+            <li class="contaktsMenu"><a href="tel:+79875111725">Телефон</a></li>
+            <li class="contaktsMenu"><a href="mailto:lighttolight228@gmail.com">E-mail</a></li>
+            <li class="contaktsMenu"><a href="https://t.me/Inrigt">Telegram</a></li>
+            <li class="contaktsMenu"><a href="https://vk.com/inrigt">VK</a></li>
+    </ul>
+</div>
+{% endblock %}
