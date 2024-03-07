@@ -1,4 +1,6 @@
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, url_for, request, redirect
+
+import app
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
@@ -19,7 +21,7 @@ class RegisterForm(FlaskForm):
     remember_me = BooleanField('Запомнить меня')
     submit = SubmitField('Войти')
 
-app = Flask(__name__)
+
 
 @app.route('/registering', methods=['GET', 'POST'])
 def register():
@@ -61,6 +63,3 @@ def logIN():
                     "submit": submit
                     }
     return render_template('log.html', form=form)
-
-if __name__ == "__main__":
-    app.run(debug=True)

@@ -3,6 +3,7 @@ from flask import Flask, render_template, url_for, request, send_file, redirect,
 from PIL import Image, ImageDraw, ImageEnhance
 import os
 
+import main2
 
 
 app = Flask(__name__)
@@ -25,10 +26,6 @@ def index():
     return render_template('index.html')
 
 app.config['SECRET_KEY'] ='secret-pzdc'
-
-
-
-
 
 @app.route('/upload', methods=['POST'])
 def upload():
@@ -108,12 +105,6 @@ def premier():
 @app.route('/about')
 def about():
     return render_template( 'about.html')
-
-
-@app.route("/get_points", methods=["GET"])
-def get_points():
-    global points
-    return {"points": points, "color": current_color}
 
 if __name__ == "__main__":
     app.run(debug=True)
