@@ -9,7 +9,7 @@
 
 {% block body %}
 <form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
-    <h1>Canvas Drawing</h1>
+    <h3>𝒫𝒽𝑜𝓉𝑜𝒫𝒶𝒾𝓃𝓉𝑒𝓇</h3>
     <input type="file" id="file-input"  name="image" onchange="loadImage()">
 
     <label for="contrast-slider">Контрастность:</label>
@@ -22,7 +22,7 @@
     <input type="range" min="0" max="2" step="0.1" id="saturation-slider" name="saturation-slider" value="1" oninput="updateImage()">
 
     <label for="sharpness-slider">Резкость</label>
-    <input type="range" min="0" max="2" step="0.1" id="sharpness-slider" name="sharpness-slider" value="1" oninput="updateImage()">
+    <input type="range" min="0" max="2" step="0.1" id="sharpness-slider" name="sharpness-slider" value="0" oninput="updateImage()">
 
     
 

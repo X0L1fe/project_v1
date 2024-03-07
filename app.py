@@ -1,93 +1,134 @@
-from flask import Flask, render_template, url_for, request, send_file, redirect, session
+from flask import Flask, render_template, url_for, request, send_file, redirect, session, abort
 
 from PIL import Image, ImageDraw, ImageEnhance
 import os
 
-import main2
+from flask_sqlalchemy import SQLAlchemy
 
+from models import *
+from forms import *
 
 app = Flask(__name__)
 
-image = None
-draw = None
-last_point = None
-current_color = (0, 0, 0)
-canvas_size = (500, 500)
+app.config['SECRET_KEY'] ='secret-pzdc'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///profile.db'
 
-def init_image():
-    global image, draw
-    image = Image.new("RGB", canvas_size, color="white")
-    draw = ImageDraw.Draw(image)
+db = SQLAlchemy(app)
 
+app.app_context().push()
 
 @app.route('/')
 @app.route('/index')
 def index():
     return render_template('index.html')
 
-app.config['SECRET_KEY'] ='secret-pzdc'
+@app.route('/registering', methods=['GET', 'POST'])
+def register():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        login = form.login.data
+        email = form.email.data
+        password = form.password.data
+        repeat_password = form.repeat_password.data
+        remember_me = form.remember_me.data
+        if password == repeat_password and login != "" and password != "" and repeat_password != "":
+            user = User(login=login, email=email, password=password)
+            print(login, email, password, repeat_password,  remember_me)
+            try:
+                db.session.add(user)
+                db.session.commit()
+                return redirect('/workplace')
+            except:
+                return redirect('/registering')
+        else:
+            return redirect('/registering')
+    return render_template('reg.html', form=form)
+
+
+@app.route('/logining', methods=['GET', 'POST'])
+def logIN():
+    form = LoginForm()
+    if form.validate_on_submit():
+        login_email = form.login_email.data
+        password = form.password.data
+        remember_me = form.remember_me.data
+        if login_email != "" and password != "":
+            
+            print(login_email, password, remember_me)
+            try:
+                pass#///
+            except:
+                return redirect('/logining')
+    return render_template('log.html', form=form)
+
+from flask import abort
 
 @app.route('/upload', methods=['POST'])
 def upload():
-    global image, draw
     if request.method == 'POST':
-        # Открытие изображения
-        # файл из запроса
+        # Проверяем, что файл был загружен
+        if 'image' not in request.files:
+            return "No file selected", 400
+
         uploaded_file = request.files['image']
         
+        # Проверяем, что файл имеет имя
         if uploaded_file.filename == "":
-            return "No file selected"
+            return "No file selected", 400
         
-        allowed_extensions = {'png', 'jpg', 'jpeg'}
-        if uploaded_file.filename.split('.')[-1].lower() not in allowed_extensions:
-            return "Invalid file type"
+        ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+        # Проверяем разрешенное расширение файла
+        if uploaded_file.filename.split('.')[-1].lower() not in ALLOWED_EXTENSIONS:
+            return "Invalid file type", 400
 
-        # Открываем файл на сервере
+        # Путь для сохранения загруженного файла
         file_path = os.path.join('static', 'EDITOR', uploaded_file.filename)
-        uploaded_file.save(file_path)
         
-        image = Image.open(uploaded_file)
+        try:
+            # Сохраняем загруженный файл
+            uploaded_file.save(file_path)
+            
+            # Открываем файл для редактирования
+            image = Image.open(file_path)
+            
+            # Применяем эффекты редактирования
+            
+            contrast = ImageEnhance.Contrast(image)
+            image = contrast.enhance(float(request.form['contrast-slider']))
 
-        
-        contrast_slider = float(request.form['contrast-slider'])
-        brightness_slider = float(request.form['brightness-slider'])
-        saturation_slider = float(request.form['saturation-slider'])
-        sharpness_slider = float(request.form['sharpness-slider'])
+            brightness = ImageEnhance.Brightness(image)
+            image = brightness.enhance(float(request.form['brightness-slider']))
 
-        # Применение эффектов контраста, яркости, насыщенности, резкости
-        
-        contrast = ImageEnhance.Contrast(image)
-        image = contrast.enhance(contrast_slider)
+            saturation = ImageEnhance.Color(image)
+            image = saturation.enhance(float(request.form['saturation-slider']))
 
-        brightness = ImageEnhance.Brightness(image)
-        image = brightness.enhance(brightness_slider)
+            sharpness = ImageEnhance.Sharpness(image)
+            image = sharpness.enhance(float(request.form['sharpness-slider']))
+            
+            edited_filename = "edited_" + uploaded_file.filename
+            save_path = os.path.join('static', 'EDITOR', edited_filename)
+            
+            image.save(save_path)
 
-        saturation = ImageEnhance.Color(image)
-        image = saturation.enhance(saturation_slider)
-
-        sharpness = ImageEnhance.Sharpness(image)
-        image = sharpness.enhance(sharpness_slider)
-        
-        # Сохранение отредактированного файла
-        edited_filename = "edited_" + uploaded_file.filename
-        save_path = os.path.join('static', 'EDITOR', edited_filename)
-        image.save(save_path)
-
-        return redirect(url_for('download', filename=edited_filename))
+            return redirect(url_for('download', filename=edited_filename))
+        except Exception as e:
+            return f"Error: {str(e)}", 500
     else:
-        return "ERROR"
+        # Возвращаем ошибку, если метод запроса не POST
+        return "Method not allowed", 405
 #///
 
 
 
 #///
-@app.route('/download/<filename>', methods=['POST','GET'])
+@app.route('/download/<filename>', methods=['GET'])
 def download(filename):
-    # Отдаем сохраненный файл пользователю
+    # Путь к файлу для скачивания
     file_path = os.path.join('static', 'EDITOR', filename)
     if not os.path.exists(file_path):
-        return redirect('/')
+        abort(404)
     return send_file(file_path, as_attachment=True)
+
 
 
 @app.route('/contakts')
