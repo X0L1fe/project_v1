@@ -4,6 +4,7 @@ let fileInput = document.getElementById("file-input");
 
 fileInput.addEventListener("change", loadImage);
 
+// Загружаем изображение
 function loadImage() {
     let file = fileInput.files[0];
     let reader = new FileReader();
@@ -21,32 +22,76 @@ function loadImage() {
     reader.readAsDataURL(file);
 }
 
+// Обновляем фильтры изображения
 function updateImage() {
     let contrast = document.getElementById('contrast-slider').value;
     let brightness = document.getElementById('brightness-slider').value;
     let saturation = document.getElementById('saturation-slider').value;
     let sharpness = document.getElementById('sharpness-slider').value;
 
-    canvas.style.filter = `contrast(${contrast}) brightness(${brightness}) saturate(${saturation}) blur(${sharpness}px)`;
+    let filters = `contrast(${contrast}) brightness(${brightness}) saturate(${saturation}) blur(${sharpness}px)`;
+    document.getElementById('image').style.filter = filters;
 }
 
-function erase() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    loadImage();
+// Сброс формы
+function resetForms() {
+    document.getElementById("file-input").value = "";
+    document.getElementById("contrast-slider").value = 1;
+    document.getElementById("brightness-slider").value = 1;
+    document.getElementById("saturation-slider").value = 1;
+    document.getElementById("sharpness-slider").value = 0;
+
+    location.reload();
 }
 
-function fill() {
-    let start = [250, 250]; // Example start point
-    let color = [255, 0, 0]; // Example color (red)
+// Получаем элементы из DOM
+let imageContainer = document.getElementById("image-container");
+let image = document.getElementById("image");
+let selectionBox = document.getElementById("selection-box");
+let cropButton = document.getElementById("croping");
+cropButton.addEventListener("click", cropImage);
 
-    $.ajax({
-        type: "POST",
-        contentType: "application/json",
-        url: "/fill",
-        data: JSON.stringify({ "start": start, "color": color }),
-        success: function () {
-            console.log("Fill updated!");
-            loadImage();
+// Обновляем выделение области при движении мыши
+imageContainer.addEventListener("mousemove", function (e) {
+    let rect = image.getBoundingClientRect();
+    let x = e.clientX - rect.left;
+    let y = e.clientY - rect.top;
+    console.log(x, y);
+    // Устанавливаем размеры и положение выделения
+    selectionBox.style.left = x + "px";
+    selectionBox.style.top = y + "px";
+});
+
+// Обработка нажатия кнопки "Обрезать"
+function cropImage() {
+    let selectionX = parseInt(selectionBox.style.left);
+    let selectionY = parseInt(selectionBox.style.top);
+    let selectionWidth = parseInt(selectionBox.offsetWidth);
+    let selectionHeight = parseInt(selectionBox.offsetHeight);
+
+    // Создаем объект FormData и добавляем данные формы
+    let formData = new FormData();
+    formData.append('x', selectionX);
+    formData.append('y', selectionY);
+    formData.append('width', selectionWidth);
+    formData.append('height', selectionHeight);
+
+    // Отправляем данные формы на сервер
+    fetch("/upload", {
+        method: "POST",
+        body: formData  // Отправляем объект FormData вместо JSON
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
         }
-    });
+        return response.text();  // Обработка успешного ответа от сервера
+    })
+    .then(data => {
+        // Ваш код для обработки ответа от сервера
+        // Например, показать сообщение об успешной обрезке
+        alert("Изображение успешно обрезано!");
+    })
+    .catch(error => console.error('There has been a problem with your fetch operation:', error));
 }
+

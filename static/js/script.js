@@ -69,27 +69,4 @@ function draw(e) {
     }
 }
 
-function saveImage() {
-    const dataURL = canvas.toDataURL('image/png');
-    fetch('/save', {
-        method: 'POST',
-        body: JSON.stringify({ image: dataURL }),
-        headers: { 'Content-Type': 'application/json' }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Изображение сохранено!');
-            // Отправить ссылку пользователю для скачивания
-            var link = document.createElement('a');
-            link.href = editedImage.src;
-            link.download = 'edited_image.png';
-            link.click();
-        } else {
-            alert('Не удалось сохранить изображение.');
-        }
-    })
-    .catch(error => {
-        console.error('Ошибка при сохранении:', error);
-    });
-}
+
