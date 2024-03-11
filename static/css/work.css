@@ -1,8 +1,50 @@
-#canvas {
-
-    border: 1px solid black;
+#image-container {
+    position: relative;
+    width: 500px; /* Замените на нужную ширину контейнера изображения */
+    height: 500px; /* Замените на нужную высоту контейнера изображения */
 }
 
 #image {
-    max-width: 500px;
+    width: 200px;
+    height: 200px;
+    object-fit: cover; /* Заполнение контейнера изображением */
+}
+
+#selection-box {
+    position: absolute;
+    border: 2px dashed rgba(255, 0, 0, 0.5); /* Пунктирная красная граница */
+    box-sizing: border-box; /* Включаем границу в размеры элемента */
+    width: 200px; /* Замените на нужную ширину контейнера изображения */
+    height: 200px; /* Замените на нужную высоту контейнера изображения */
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+#canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+}
+
+#canvas-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+button {
+    margin-top: 10px; /* Отступ от верхней части контейнера */
+    padding: 10px 20px; /* Размер кнопки */
+    background-color: #007bff; /* Цвет фона кнопки */
+    color: #fff; /* Цвет текста кнопки */
+    border: none; /* Убираем границу кнопки */
+    border-radius: 5px; /* Закругляем углы кнопки */
+    cursor: pointer; /* Устанавливаем курсор в виде указателя */
+    transition: background-color 0.3s; /* Плавное изменение цвета при наведении */
+}
+
+button:hover {
+    background-color: #0056b3; /* Цвет фона кнопки при наведении */
 }
