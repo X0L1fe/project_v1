@@ -30,23 +30,12 @@ function updateImage() {
     canvas.style.filter = `contrast(${contrast}) brightness(${brightness}) saturate(${saturation}) blur(${sharpness}px)`;
 }
 
-function erase() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    loadImage();
-}
+function resetForms() {
+    document.getElementById("file-input").value = "";
+    document.getElementById("contrast-slider").value = 1;
+    document.getElementById("brightness-slider").value = 1;
+    document.getElementById("saturation-slider").value = 1;
+    document.getElementById("sharpness-slider").value = 0;
 
-function fill() {
-    let start = [250, 250]; // Example start point
-    let color = [255, 0, 0]; // Example color (red)
-
-    $.ajax({
-        type: "POST",
-        contentType: "application/json",
-        url: "/fill",
-        data: JSON.stringify({ "start": start, "color": color }),
-        success: function () {
-            console.log("Fill updated!");
-            loadImage();
-        }
-    });
+    location.reload();
 }
