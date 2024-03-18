@@ -1,5 +1,7 @@
+from io import BytesIO
 from sqlite3 import IntegrityError
 from flask import Flask, make_response, render_template, url_for, request, send_file, redirect, session, abort, flash
+from flask_cors import CORS, cross_origin
 
 from PIL import Image, ImageDraw, ImageEnhance
 import os
@@ -13,8 +15,12 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
+cors = CORS(app, origins=['http://localhost:5000', 'http://127.0.0.1:5000'],)
+
 app.config['SECRET_KEY'] ='secret-pzdc'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///profile.db'
+app.config['CORS_HEADER'] = 'Content-Type'
+app.config['Access-Control-Allow-Origin'] = ('*')
 
 db = SQLAlchemy(app)
 
@@ -83,8 +89,6 @@ def logIN():
 
 from flask import abort
 
-from flask import request
-
 @app.route('/upload', methods=['POST'])
 def upload():
     if request.method == 'POST':
@@ -113,17 +117,11 @@ def upload():
             # Открываем файл для редактирования
             image = Image.open(file_path)
 
-            # Получаем параметры обрезки из запроса
-            x = int(request.form.get('x'))  # НОВОЕ
-            y = int(request.form.get('y'))  # НОВОЕ
-            width = int(request.form.get('width'))  # НОВОЕ
-            height = int(request.form.get('height'))  # НОВОЕ
 
 
             # Применяем фильтры и обрезаем изображение
             image = process_image(
                 image,
-                x, y, width, height,
                 request.form['contrast-slider'],
                 request.form['brightness-slider'],
                 request.form['saturation-slider'],
@@ -143,10 +141,7 @@ def upload():
         return "Method not allowed", 405
 
 #///
-def process_image(image, x, y, width, height, contrast_slider, brightness_slider, saturation_slider, sharpness_slider):
-    # Обрезаем изображение
-    image = image.crop((x, y, x + width, y + height))
-
+def process_image(image, contrast_slider, brightness_slider, saturation_slider, sharpness_slider):
     # Применяем фильтры к изображению
     contrast = ImageEnhance.Contrast(image)
     image = contrast.enhance(float(contrast_slider))
@@ -161,6 +156,41 @@ def process_image(image, x, y, width, height, contrast_slider, brightness_slider
     image = sharpness.enhance(float(sharpness_slider))
 
     return image
+
+def crop(image_data, x, y, width, height):
+    image = Image.open(BytesIO(image_data))
+    cropped_image = image.crop((x, y, x + width, y + height))
+    return cropped_image
+
+@app.route('/croping', methods=['POST'])
+@cross_origin(origins=['http://localhost:5000', 'https://127.0.0.1:5000'])
+def perform_crop():
+    if request.method == 'POST':
+        try:
+            
+            x = int(request.form['x'])
+            y = int(request.form['y'])
+            width = int(request.form['width'])
+            height = int(request.form['height'])
+            print(request.form)
+            uploaded_file = request.files['image']
+            # image_data = uploaded_file.read()
+
+            # cropped_image = crop(image_data, x, y, width, height)
+
+            # edited_filename = "cropped_" + uploaded_file.filename
+            # save_path = os.path.join('static', 'EDITOR', edited_filename)
+            
+            # cropped_image.save(save_path)
+
+            # return redirect(url_for('download', filename=edited_filename))
+        except Exception as e:
+            return f"Error: {str(e)}", 500
+    else:
+        return "Method not allowed", 405
+
+# Функция для обрезки изображения
+
 
 #///
 @app.route('/download/<filename>', methods=['GET'])

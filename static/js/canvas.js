@@ -56,7 +56,6 @@ imageContainer.addEventListener("mousemove", function (e) {
     let rect = image.getBoundingClientRect();
     let x = e.clientX - rect.left;
     let y = e.clientY - rect.top;
-    console.log(x, y);
     // Устанавливаем размеры и положение выделения
     selectionBox.style.left = x + "px";
     selectionBox.style.top = y + "px";
@@ -75,22 +74,15 @@ function cropImage() {
     formData.append('y', selectionY);
     formData.append('width', selectionWidth);
     formData.append('height', selectionHeight);
-
     // Отправляем данные формы на сервер
-    fetch("/upload", {
+    fetch("http://localhost:5000/croping", {
         method: "POST",
-        body: formData  // Отправляем объект FormData вместо JSON
+        body: formData 
     })
     .then(response => {
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        return response.text();  // Обработка успешного ответа от сервера
-    })
-    .then(data => {
-        // Ваш код для обработки ответа от сервера
-        // Например, показать сообщение об успешной обрезке
-        alert("Изображение успешно обрезано!");
     })
     .catch(error => console.error('There has been a problem with your fetch operation:', error));
 }
