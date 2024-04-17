@@ -1,24 +1,28 @@
-from io import BytesIO
 from sqlite3 import IntegrityError
 from flask import Flask, make_response, render_template, url_for, request, send_file, redirect, session, abort, flash
-from flask_cors import CORS, cross_origin
+from flask_login import LoginManager, current_user, login_user
 
-from PIL import Image, ImageDraw, ImageEnhance
+from PIL import Image as IMAGE, ImageEnhance
 import os
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import or_
+import uuid
 
 from models import *
 from forms import *
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
+login_manager = LoginManager()
+login_manager.init_app(app)
 
-cors = CORS(app, origins=['http://localhost:5000', 'http://127.0.0.1:5000'],)
+UPLOAD_FOLDER = 'static/EDITOR/'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 app.config['SECRET_KEY'] ='secret-pzdc'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///profile.db'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['CORS_HEADER'] = 'Content-Type'
 app.config['Access-Control-Allow-Origin'] = ('*')
 
@@ -42,11 +46,11 @@ def register():
         if password == repeat_password and login != "" and password != "" and repeat_password != "":
             user = User()
             password_hash = user.set_password(password)
-            print(user.set_password(password))
             user = User(login=login, email=email, password=password_hash)
             try:
                 db.session.add(user)
                 db.session.commit()
+                session['user_id'] = user.id
                 return redirect('/workplace')
             except IntegrityError:
                 db.session.rollback()  # Откатываем изменения
@@ -79,7 +83,7 @@ def logIN():
                     return resp
                 else:
                     # Не сохранять сеанс
-                    session['user_id'] = user.id
+                    login_user(user)
                     return redirect('/workplace')
             else:
                 # Неверный email или пароль
@@ -87,11 +91,27 @@ def logIN():
                 return redirect('/logining')
     return render_template('log.html', form=form)
 
-from flask import abort
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)  # Удаляем идентификатор пользователя из сессии
+    resp = make_response(redirect('/'))
+    resp.set_cookie('user_id', '', expires=0)  # Удаляем куки с идентификатором пользователя
+    return resp
+
+@login_manager.user_loader
+def load_user(user_id):
+    return db.session.get(User, user_id)
+
+def unique_filename(filename):
+    name, ext = os.path.splitext(filename)
+    return f"{name}_{uuid.uuid4().hex}{ext}"
 
 @app.route('/upload', methods=['POST'])
 def upload():
     if request.method == 'POST':
+
+        user = current_user#!!!получаем пользователя!!!
+        
         # Проверяем, что файл был загружен
         if 'image' not in request.files:
             return "No file selected", 400
@@ -102,23 +122,17 @@ def upload():
         if uploaded_file.filename == "":
             return "No file selected", 400
 
-        ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
-        # Проверяем разрешенное расширение файла
         if uploaded_file.filename.split('.')[-1].lower() not in ALLOWED_EXTENSIONS:
             return "Invalid file type", 400
 
         # Путь для сохранения загруженного файла
-        file_path = os.path.join('static', 'EDITOR', uploaded_file.filename)
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], uploaded_file.filename)
 
         try:
             # Сохраняем загруженный файл
             uploaded_file.save(file_path)
-
             # Открываем файл для редактирования
-            image = Image.open(file_path)
-
-
-
+            image = IMAGE.open(file_path)
             # Применяем фильтры и обрезаем изображение
             image = process_image(
                 image,
@@ -129,11 +143,22 @@ def upload():
             )
 
             edited_filename = "edited_" + uploaded_file.filename
-            save_path = os.path.join('static', 'EDITOR', edited_filename)
+            save_path = os.path.join(app.config['UPLOAD_FOLDER'], edited_filename)
 
             image.save(save_path)
-
-            return redirect(url_for('download', filename=edited_filename))
+            try:
+                image_metadata = dict(image.info)
+                image = Image(filename=unique_filename(uploaded_file.filename),
+                          path=file_path,
+                          metadata=image_metadata,
+                          user_id=user.id)
+                db.session.add(image)
+                db.session.commit()
+                return redirect(url_for('download', filename=edited_filename))
+            except Exception as e:
+                db.session.rollback()
+                print (f"Error: {str(e)}", 500)
+                return f"Error: {str(e)}", 500
         except Exception as e:
             return f"Error: {str(e)}", 500
     else:
@@ -157,41 +182,6 @@ def process_image(image, contrast_slider, brightness_slider, saturation_slider, 
 
     return image
 
-def crop(image_data, x, y, width, height):
-    image = Image.open(BytesIO(image_data))
-    cropped_image = image.crop((x, y, x + width, y + height))
-    return cropped_image
-
-@app.route('/croping', methods=['POST'])
-@cross_origin(origins=['http://localhost:5000', 'https://127.0.0.1:5000'])
-def perform_crop():
-    if request.method == 'POST':
-        try:
-            
-            x = int(request.form['x'])
-            y = int(request.form['y'])
-            width = int(request.form['width'])
-            height = int(request.form['height'])
-            print(request.form)
-            uploaded_file = request.files['image']
-            # image_data = uploaded_file.read()
-
-            # cropped_image = crop(image_data, x, y, width, height)
-
-            # edited_filename = "cropped_" + uploaded_file.filename
-            # save_path = os.path.join('static', 'EDITOR', edited_filename)
-            
-            # cropped_image.save(save_path)
-
-            # return redirect(url_for('download', filename=edited_filename))
-        except Exception as e:
-            return f"Error: {str(e)}", 500
-    else:
-        return "Method not allowed", 405
-
-# Функция для обрезки изображения
-
-
 #///
 @app.route('/download/<filename>', methods=['GET'])
 def download(filename):
@@ -207,9 +197,15 @@ def download(filename):
 def contact():
     return render_template( 'contakts.html')
 
-@app.route("/workplace")
+@app.route('/workplace')
 def workplace():
-    return render_template("workplace.html")
+    if current_user.is_authenticated:
+        
+        return render_template("workplace.html")
+    else:
+        #на страницу входа в систему
+        return redirect('/logining')
+
 
 @app.route('/premier')
 def premier():

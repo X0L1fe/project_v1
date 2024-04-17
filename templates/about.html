@@ -3,23 +3,62 @@
 {%block title %}𝒫𝒽𝑜𝓉𝑜𝒫𝒶𝒾𝓃𝓉𝑒𝓇 | О нас{% endblock %}
 
 {% block links %}
-<script src="{{ url_for('static', filename='js/background.js')}}" type="text/javascript" defer></script>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/about.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/page.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css')}}">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js" defer></script>
 {% endblock %}
 
 {% block body %}
 <!--стр о нас-->
-<div class="background" id="background"></div>
-<div class="page" id="about">
-    <div class="content">
-        <p class="Text">PhotoPainter - это мощный и универсальный инструмент, разработанный для творческой
-            обработки
-            и создания фотографий
-            с использованием передовых технологий. Он обладает обширным и разнообразным функционалом,
-            предоставляющим пользователям широкий
-            спектр возможностей в области редактирования, ретуширования, цветокоррекции, композиции и
-            создания
-            искусственных эффектов на изображениях.</p>
+<div class="BODY_1"></div>
+<div class="BODY_2"></div>
+<div class="header">
+    <div class="header__logo">
+      <a class="MainLogo" href="/" style="text-decoration: none;"><img
+          src="{{ url_for('static', filename='img/camera_v1-RPBGY.png')}}" width="90">
+        <h2>𝒫𝒽𝑜𝓉𝑜𝒫𝒶𝒾𝓃𝓉𝑒𝓇</h2>
+      </a>
     </div>
+    <nav class="navbar">
+      <ul class="navbar__menu">
+        <li class="navbar__item">
+          <a href="/about" class="navbar__link"><i data-feather="info"></i><span>О нас</span></a>
+        </li>
+        <li class="navbar__item">
+          <a href="/premier" class="navbar__link"><i data-feather="folder"></i><span>Портфолио</span></a>
+        </li>
+        <li class="navbar__item">
+          <a href="/contakts" class="navbar__link"><i data-feather="message-square"></i><span>Контакты</span></a>
+        </li>
+        <li class="navbar__item">
+          <a href="/logining" class="navbar__link"><i data-feather="user-check"></i><span>Войти</span></a>
+        </li>
+        <li class="navbar__item">
+          <a href="/registering" class="navbar__link"><i data-feather="user-plus"></i><span>Регистрация</span></a>
+        </li>
+        <li class="navbar__item">
+          <a href="/helper" class="navbar__link"><i data-feather="help-circle"></i><span>Помощь</span></a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <!-- partial -->
+  <script src='https://unpkg.com/feather-icons' defer></script>
+  <script src="{{ url_for('static', filename='js/menu.js')}}" defer></script>
+
+  <div class="page" id="about">
+    <div class="content">
+        <p class="text_container">PhotoPainter - это мощный и универсальный инструмент, разработанный для творческой
+            обработки и создания фотографий с использованием передовых технологий.
+            Он обладает обширным и разнообразным функционалом, предоставляющим пользователям широкий
+            спектр возможностей в области редактирования, ретуширования, цветокоррекции, композиции и
+            создания искусственных эффектов на изображениях.</p>
+    </div>
+    
+    
 </div>
+
 {% endblock %}

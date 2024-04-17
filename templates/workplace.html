@@ -24,19 +24,14 @@
     <label for="sharpness-slider">Резкость</label>
     <input type="range" min="-1" max="1" step="0.1" id="sharpness-slider" name="sharpness-slider" value="0" oninput="updateImage()">
 
-    
-
     <button>Download</button>
 
     <div id="image-container">
-        <canvas id="canvas" width="500" height="500" style="border:1px solid black;"></canvas>
-        <img id="image" src="">
-        <div id="selection-box"></div>
+        <canvas id="canvas" width="500" height="500" style="border:1px solid black;"><img id="image" src=""></canvas>
+        
     </div>
 </form>
 <button name="reset" onclick="resetForms()">Сбросить</button>
-
-<button id="croping">Обрезать</button>
 {% if edited_filename %}
     <a href="{{ url_for('download', filename=edited_filename) }}" download>Download Image</a>
 {% endif %}

@@ -3,8 +3,7 @@
   min-width: 220px;
   margin: 20px auto;
   padding: 30px 50px;
-  border: 1px solid #ccd;
-  background-color: white;
+
 }
 
 /* General styles */
@@ -45,14 +44,14 @@ div.sim-slider-arrow-left {
   left: 10px;
   top: 40%;
   display: block;
-  background: url("http://pvbk.spb.ru/inc/slider/sim-files/sim-arrow-left.png") no-repeat;
+
 }
 
 div.sim-slider-arrow-right {
   right: 10px;
   top: 40%;
   display: block;
-  background: url("http://pvbk.spb.ru/inc/slider/sim-files/sim-arrow-right.png") no-repeat;
+
 }
 
 div.sim-slider-arrow-left:hover {
@@ -82,4 +81,7 @@ span.sim-dot {
   background-color: #BBB;
   border-radius: 5px;
   cursor: pointer;
+}
+.image{
+  opacity: 0;
 }

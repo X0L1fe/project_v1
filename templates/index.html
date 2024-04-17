@@ -3,27 +3,100 @@
 {%block title %}𝒫𝒽𝑜𝓉𝑜𝒫𝒶𝒾𝓃𝓉𝑒𝓇{% endblock %}
 
 {% block links %}
-<script src="{{ url_for('static', filename='js/background.js')}}" type="text/javascript" defer></script>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/page.css')}}">
+<script src="{{ url_for('static', filename='js/slider.js')}}" type="text/javascript" defer></script><!--скрипт слайдера-->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/slider.css')}}">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js" defer></script>
 {% endblock %}
 
 {% block body %}
-<div class="background" id="background"></div>
-<nav class="TopMenu"><!--гл меню-->
-         
-        <ul class="navbar">
-                <li class="LeftItem"><a href="/about">О нас</a></li>
-                <li class="LeftItem"><a href="/premier">Портфолио</a></li>
-                <li class="LeftItem"><a href="/contakts">Контакты</a></li>
-
-                <li class="RightItem"><a href="/registering">Регистрация</a></li>
-                <li class="RightItem"><a href="/logining">Войти</a></li>
-
-                <li class="TopItem"><a href="/logining">Начать работу</a></li>
-
-                <li class="TopItem"><a href="/workplace">Рисунок</a></li>
-        </ul>
-</nav>
 <!---->
+<div class="BODY_1"></div>
+<div class="BODY_2"></div>
+<div class="header">
+  <div class="header__logo">
+    <a class="MainLogo" href="/" style="text-decoration: none;"><img
+        src="{{ url_for('static', filename='img/camera_v1-RPBGY.png')}}" width="90">
+      <h2>𝒫𝒽𝑜𝓉𝑜𝒫𝒶𝒾𝓃𝓉𝑒𝓇</h2>
+    </a>
+  </div>
+  <nav class="navbar">
+    <ul class="navbar__menu">
+      <li class="navbar__item">
+        <a href="/about" class="navbar__link"><i data-feather="info"></i><span>О нас</span></a>
+      </li>
+      <li class="navbar__item">
+        <a href="/premier" class="navbar__link"><i data-feather="folder"></i><span>Портфолио</span></a>
+      </li>
+      <li class="navbar__item">
+        <a href="/contakts" class="navbar__link"><i data-feather="message-square"></i><span>Контакты</span></a>
+      </li>
+      <li class="navbar__item">
+        <a href="/logining" class="navbar__link"><i data-feather="user-check"></i><span>Войти</span></a>
+      </li>
+      <li class="navbar__item">
+        <a href="/registering" class="navbar__link"><i data-feather="user-plus"></i><span>Регистрация</span></a>
+      </li>
+      <li class="navbar__item">
+        <a href="/helper" class="navbar__link"><i data-feather="help-circle"></i><span>Помощь</span></a>
+      </li>
+    </ul>
+  </nav>
+</div>
+<!-- partial -->
+<script src='https://unpkg.com/feather-icons' defer></script>
+<script src="{{ url_for('static', filename='js/menu.js')}}" defer></script>
+
+<!--стр партфолио-->
+<div class="page" id="premier">
+  <div class="sim-slider" id="first">
+    <p style="color: white;">PhotoPainter</p>
+    <div class="sim-slider">
+      <ul class="sim-slider-list">
+        <li><img src="{{ url_for('static', filename='img/screen.png')}}" alt="screen" class="image"></li>
+        <!-- это экран -->
+        <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/1.jpg')}}" alt="0" width=100%>
+        </li>
+        <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/2.jpg')}}" alt="1" width=100%>
+        </li>
+        <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/3.jpg')}}" alt="2" width=100%>
+        </li>
+        <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/4.jpg')}}" alt="3" width=100%>
+        </li>
+        <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/5.jpg')}}" alt="4" width=100%>
+        </li>
+        <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/6.jpg')}}" alt="5" width=100%>
+        </li>
+        <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/7.jpg')}}" alt="6" width=100%>
+        </li>
+        <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/8.jpg')}}" alt="7" width=100%>
+        </li>
+        <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/9.jpg')}}" alt="8" width=100%>
+        </li>
+        <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/10.jpg')}}" alt="9" width=100%>
+        </li>
+        <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/11.jpg')}}" alt="10" width=100%>
+        </li>
+        <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/12.jpg')}}" alt="11" width=100%>
+        </li>
+        <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/13.jpg')}}" alt="12" width=100%>
+        </li>
+        <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/14.jpg')}}" alt="13" width=100%>
+        </li>
+        <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/15.jpg')}}" alt="14" width=100%>
+        </li>
+        <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/16.jpg')}}" alt="15" width=100%>
+        </li>
+      </ul>
+      <div class="sim-slider-arrow-left"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg></i></div>
+      <div class="sim-slider-arrow-right"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></i></div>
+      <div class="sim-slider-dots"></div>
+    </div>
+    </ul>
+  </div>
+</div>
+
 {% endblock %}

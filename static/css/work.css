@@ -10,17 +10,6 @@
     object-fit: cover; /* Заполнение контейнера изображением */
 }
 
-#selection-box {
-    position: absolute;
-    border: 2px dashed rgba(255, 0, 0, 0.5); /* Пунктирная красная граница */
-    box-sizing: border-box; /* Включаем границу в размеры элемента */
-    width: 200px; /* Замените на нужную ширину контейнера изображения */
-    height: 200px; /* Замените на нужную высоту контейнера изображения */
-    top: 0;
-    left: 0;
-    z-index: 1;
-}
-
 #canvas {
     position: absolute;
     top: 0;
@@ -37,7 +26,7 @@
 button {
     margin-top: 10px; /* Отступ от верхней части контейнера */
     padding: 10px 20px; /* Размер кнопки */
-    background-color: #007bff; /* Цвет фона кнопки */
+    background-color: #000000; /* Цвет фона кнопки */
     color: #fff; /* Цвет текста кнопки */
     border: none; /* Убираем границу кнопки */
     border-radius: 5px; /* Закругляем углы кнопки */
@@ -46,5 +35,5 @@ button {
 }
 
 button:hover {
-    background-color: #0056b3; /* Цвет фона кнопки при наведении */
+    background-color: #888888; /* Цвет фона кнопки при наведении */
 }
