@@ -1,42 +1,87 @@
 {% extends 'base.html' %}
 
-{%block title %}𝒫𝒽𝑜𝓉𝑜𝒫𝒶𝒾𝓃𝓉𝑒𝓇 | Холст{% endblock %}
+{% block title %}𝒫𝒽𝑜𝓉𝑜𝒫𝒶𝒾𝓃𝓉𝑒𝓇 | Редактор{% endblock %}
+
 {% block links %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/work.css')}}">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
 <script src="{{ url_for('static', filename='js/canvas.js')}}" type="text/javascript" defer></script>
+
 {% endblock %}
 
 {% block body %}
-<form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
-    <h3>𝒫𝒽𝑜𝓉𝑜𝒫𝒶𝒾𝓃𝓉𝑒𝓇</h3>
-    <input type="file" id="file-input"  name="image" onchange="loadImage()">
+{% include 'base_menu.html' %}
+<form action="{{ url_for('upload', token=token) }}" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="image-selection">
+        <div class="image-selection-content">
+            <div class="comments-container">
+                <p>Загрузите изображение для начала работы с редактором.</p>
+            </div>
+            <div class="file-input">
+                <input type="file" id="file" class="file" name="image" onchange="loadImage()">
+                <label for="file">Загрузить изображение <i data-feather="upload"></i>
+                    <p class="file-name"></p>
+                </label>
+            </div>
+            <div class="comments-container">
+                <p>Все Ваши скаченные изображения можно посмотреть в <a href="/profile">профиле</a> или <a
+                        href="/premier">портфолио</a></p>
+            </div>
+            <div class="comments-container">
+                <p>Если остались вопросы, то напишите <a href="https://t.me/PhotoPainterSupport_bot">нам</a><i
+                        data-feather="smile"></i></p>
+            </div>
+        </div>
+    </div>
 
-    <label for="contrast-slider">Контрастность:</label>
-    <input type="range" min="0" max="2" step="0.1" id="contrast-slider" name="contrast-slider" value="1" oninput="updateImage()">
-
-    <label for="brightness-slider">Яркость:</label>
-    <input type="range" min="0" max="2" step="0.1" id="brightness-slider" name="brightness-slider" value="1" oninput="updateImage()">
-
-    <label for="saturation-slider">Насыщенность</label>
-    <input type="range" min="0" max="2" step="0.1" id="saturation-slider" name="saturation-slider" value="1" oninput="updateImage()">
-
-    <label for="sharpness-slider">Резкость</label>
-    <input type="range" min="-1" max="1" step="0.1" id="sharpness-slider" name="sharpness-slider" value="0" oninput="updateImage()">
-
+    <div class="image-editor hide">
+        <div id="image-container">
+            <canvas id="canvas"></canvas>
+        </div>
+        <div class="controls hide">
+            <div class="control">
+                <label for="contrast-slider">Контрастность:</label>
+                <input type="range" min="0" max="2" step="0.01" id="contrast-slider" name="contrast-slider" value="1"
+                    oninput="updateImage()">
+                <span class="slider-value" id="contrast-value">1</span>
+            </div>
+            <div class="control">
+                <label for="brightness-slider">Яркость:</label>
+                <input type="range" min="0" max="2" step="0.01" id="brightness-slider" name="brightness-slider" value="1"
+                    oninput="updateImage()">
+                <span class="slider-value" id="brightness-value">1</span>
+            </div>
+            <div class="control">
+                <label for="saturation-slider">Насыщенность:</label>
+                <input type="range" min="0" max="2" step="0.01" id="saturation-slider" name="saturation-slider" value="1"
+                    oninput="updateImage()">
+                <span class="slider-value" id="saturation-value">1</span>
+            </div>
+            <div class="control">
+                <label for="sharpness-slider">Резкость:</label>
+                <input type="range" min="0" max="1" step="0.01" id="sharpness-slider" name="sharpness-slider" value="0"
+                    oninput="updateImage()">
+                <span class="slider-value" id="sharpness-value">0</span>
+            </div>
+        </div>
+        <button type="submit">Download</button>
+    </div>
     
-
-    <button>Download</button>
-
-    <canvas id="canvas" width="500" height="500" style="border:1px solid black;"></canvas>
-
-    <img id="image" style="max-width: 500px;">
 </form>
-<button name="reset" onclick="resetForms()">Сбросить</button>
-
-<button id="croping">Обрезать</button>
+<button class="reset-button" name="reset" onclick="resetForms()">Сбросить</button>
 {% if edited_filename %}
-    <a href="{{ url_for('download', filename=edited_filename) }}" download>Download Image</a>
+<a href="{{ url_for('download', filename=edited_filename) }}" download>Download Image</a>
 {% endif %}
-
+<script>
+    // Добавляем CSRF-токен ко всем AJAX-запросам
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token() }}");
+            }
+        }
+    });
+</script>
 {% endblock %}

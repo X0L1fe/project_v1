@@ -3,73 +3,34 @@
 {%block title %}𝒫𝒽𝑜𝓉𝑜𝒫𝒶𝒾𝓃𝓉𝑒𝓇 | Портфолио{% endblock %}
 
 {% block links %}
-<script src="{{ url_for('static', filename='js/slider.js')}}" type="text/javascript" defer></script>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/slider.css')}}"><!--скрипт слайдера-->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css')}}">
+<script src="{{ url_for('static', filename='js/fullScreen.js')}}" type="text/javascript" defer></script><!--скрипт полноэкранного режима и навигации-->
 {% endblock %}
 
 {% block body %}
-<!--стр партфолио-->
-<div class="page" id="premier">
-    <div class="sim-slider" id="first">
-        <p>PhotoPainter</p>
-        <div class="sim-slider">
-            <ul class="sim-slider-list">
-                <li><img src="http://pvbk.spb.ru/inc/slider/imgs/no-image.gif" alt="screen"></li>
-                <!-- это экран -->
-                <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/1.jpg')}}" alt="0"
-                        width=100%>
-                </li>
-                <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/2.jpg')}}" alt="1"
-                        width=100%>
-                </li>
-                <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/3.jpg')}}" alt="2"
-                        width=100%>
-                </li>
-                <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/4.jpg')}}" alt="3"
-                        width=100%>
-                </li>
-                <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/5.jpg')}}" alt="4"
-                        width=100%>
-                </li>
-                <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/6.jpg')}}" alt="5"
-                        width=100%>
-                </li>
-                <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/7.jpg')}}" alt="6"
-                        width=100%>
-                </li>
-                <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/8.jpg')}}" alt="7"
-                        width=100%>
-                </li>
-                <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/9.jpg')}}" alt="8"
-                        width=100%>
-                </li>
-                <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/10.jpg')}}" alt="9"
-                        width=100%>
-                </li>
-                <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/11.jpg')}}" alt="10"
-                        width=100%>
-                </li>
-                <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/12.jpg')}}" alt="11"
-                        width=100%>
-                </li>
-                <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/13.jpg')}}" alt="12"
-                        width=100%>
-                </li>
-                <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/14.jpg')}}" alt="13"
-                        width=100%>
-                </li>
-                <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/15.jpg')}}" alt="14"
-                        width=100%>
-                </li>
-                <li class="sim-slider-element"><img src="{{ url_for('static', filename='slider/16.jpg')}}" alt="15"
-                        width=100%>
-                </li>
-            </ul>
-            <div class="sim-slider-arrow-left"></div>
-            <div class="sim-slider-arrow-right"></div>
-            <div class="sim-slider-dots"></div>
+
+{% include 'base_menu.html' %}
+
+<div class="container">
+    <div class="user-data-image">
+        <h3>Ваше портфолио:</h3>
+    </div>
+    <div class="img-container">
+        {% for image in user_images %}
+        <div id="modal" class="modal">
+            <span class="close">&times;</span>
+            <img class="modal-content" id="modal-image">
+            <button class="prev-button"><i data-feather="arrow-left"></i></button>
+            <button class="next-button"><i data-feather="arrow-right"></i></button>
         </div>
-        </ul>
+        <div class="img">
+            <img src="{{ url_for('static', filename='EDITOR/' + image.filename) }}" alt="{{ image.original_filename }}">
+            <div class="image-buttons">
+                <button class="fullscreen-button">Полноэкранный режим</button>
+            </div>
+        </div>
+        {% endfor %}
     </div>
 </div>
+
 {% endblock %}
