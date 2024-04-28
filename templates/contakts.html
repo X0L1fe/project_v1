@@ -1,21 +1,35 @@
 {% extends 'base.html' %}
 
-{%block title %}𝒫𝒽𝑜𝓉𝑜𝒫𝒶𝒾𝓃𝓉𝑒𝓇{% endblock %}
+{% block title %}𝒫𝒽𝑜𝓉𝑜𝒫𝒶𝒾𝓃𝓉𝑒𝓇 | Контакты{% endblock %}
 
 {% block links %}
-<script src="{{ url_for('static', filename='js/background.js')}}" type="text/javascript" defer></script>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/helper.css')}}">
+<!-- Добавляем стили для иконок Feather -->
+
 {% endblock %}
 
 {% block body %}
-<!--контакты-->
-<div class="background" id="background"></div>
-<div class="page" id="contakts">
-    <ul class="navbarContakts">
-            <li class="contaktsMenu"><a href="tel:+79875111725">Телефон</a></li>
-            <li class="contaktsMenu"><a href="mailto:lighttolight228@gmail.com">E-mail</a></li>
-            <li class="contaktsMenu"><a href="https://t.me/PhotoPainterSupport_bot">Telegram</a></li>
-            <li class="contaktsMenu"><a href="https://vk.com/inrigt">VK</a></li>
-    </ul>
+
+{% include 'base_menu.html' %}
+
+<!-- Контакты -->
+<div class="container" id="contacts">
+    <div class="content">
+        <div class="comments-container">
+            <h3>Наши контакты:</h3>
+            <p>Вы всегда можете связаться с нами по указанным контактам для получения помощи, консультаций или обсуждения любых вопросов, связанных с нашим сервисом. Мы с нетерпением ждем вашего обращения!</p>
+            <ul class="navbarContacts">
+                <li class="contactsMenu"><a href="tel:+79875111725">Телефон <i data-feather="phone"></i></a></li>
+                <li class="contactsMenu"><a href="mailto:helperphotopainter@gmail.com"></i>E-mail <i data-feather="mail"></i></a></li>
+                <li class="contactsMenu"><a href="https://t.me/PhotoPainterSupport_bot">Telegram <i data-feather="send"></i></a></li>
+            </ul>
+        </div>
+    </div>
 </div>
+
 {% endblock %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.css">
+<script>
+    // Инициализация иконок Feather
+    feather.replace();
+</script>

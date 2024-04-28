@@ -23,6 +23,19 @@ body {
 
 .header__logo {
   margin-left: 5%;
+  
+}
+
+.header__logo a{
+  text-decoration: none;
+  color: #fff;
+  transition: color 0.4s;
+  align-items: center;
+  justify-content: center;
+}
+
+.header__logo a:hover{
+  color: rgb(255, 0, 0);
 }
 
 .navbar {

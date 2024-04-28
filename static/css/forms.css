@@ -110,8 +110,12 @@
     cursor: pointer;
     text-align: center;
     color: black;
+    transition: color 0.7s, background 0.7s;
   }
-  
+  button:hover{
+    color: #ff0000;
+    background: #000000;
+  }
   .register{
     margin-top: 20px;
     font-size: .9em;
@@ -127,5 +131,36 @@
   
   .register p a:hover{
     text-decoration: underline;
+  }
+  .forget label {
+    display: flex; /* Расположение элементов в строку */
+    align-items: center; /* Выравнивание элементов по вертикали */
+}
+  .forget label input[type=checkbox] {
+    appearance: none;
+    background-color: #000000;
+    margin: 0;
+    font: inherit;
+    color: currentColor;
+    width: 1.15em;
+    height: 1.15em;
+    border: 0.15em solid rgb(255, 255, 255);
+    border-radius: 0.15em;
+    display: grid;
+    place-content: center;
+    &::before {
+      content: "";
+      width: 0.65em;
+      height: 0.65em;
+      transform: scale(0);
+      transition: 120ms transform ease-in-out;
+      box-shadow: inset 1em 1em #ffffff;
+      background-color: CanvasText;
+      clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+      transform-origin: left top;
+    }
+    &:checked::before {
+      transform: scale(1);
+    }
   }
   

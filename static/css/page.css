@@ -7,6 +7,7 @@ html {
   .BODY_1, .BODY_2 {
     display: block;
     color: transparent;
+    z-index: -1 !important;
   }
   
   .BODY_2::before, .BODY_2::after,
